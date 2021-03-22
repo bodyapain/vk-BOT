@@ -1,0 +1,741 @@
+from flask import Flask, request, json
+
+from vk_api.utils import get_random_id
+from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
+import pymysql.cursors
+
+import vk_api
+import random
+import datetime
+import time
+from datetime import date
+import calendar
+
+token = "a7050da6fe4476a43e860db8c32ee237f8c5807bc8d5e514246f8ef9b597e531fffa9f3a1fd5471a6d299"
+my_date = date.today()
+
+vk = vk_api.VkApi(token=token)
+vk._auth_token()
+vk._auth_token()
+
+
+
+
+
+
+##def predmeti_vruchnuy()
+
+
+while True:
+  try:
+    messages = vk.method("messages.getConversations", {"offset": 0, "count": 20, "filter": "unanswered"})
+    if messages["count"] >= 1:
+        id = messages["items"][0]["last_message"]["from_id"]
+        body = messages["items"][0]["last_message"]["text"]
+        if body.lower() == "привет":
+          vk.method("messages.send",
+            {"peer_id": id, "message": "Привет!", "random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "инфа":
+          vk.method("messages.send",
+            {"peer_id": id, "message": "https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09", "random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "физика":
+          vk.method("messages.send",
+            {"peer_id": id, "message": "https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09", "random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "прога л":
+          vk.method("messages.send",
+            {"peer_id": id, "message": "https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09", "random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "прога п":
+          vk.method("messages.send",
+            {"peer_id": id,"message": "https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "философия":
+          vk.method("messages.send",
+            {"peer_id": id,"message": "https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09","random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "аиг":
+          vk.method("messages.send",
+            {"peer_id": id,"message": "https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "матан л":
+          vk.method("messages.send",
+            {"peer_id": id,"message": "https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09","random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "матан п":
+          vk.method("messages.send",
+            {"peer_id": id,"message": "https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09","random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "англ":
+          vk.method("messages.send",
+            {"peer_id": id,"message": "https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09","random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "предметы":
+          vk.method("messages.send",
+            {"peer_id": id,"message": "англ\n матан л\n философия\n аиг\n инфа\n физика\n прога л\n прога п\n","random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "понедельник":
+          vk.method("messages.send",
+            {"peer_id": id, "message": "Прога.л 13:45\n Инфа.п 15:40\n АиГ.п 17:20\n", "random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "вторник":
+          vk.method("messages.send",
+            {"peer_id": id, "message": "Философия.л/АиГ 13:45\n АиГ 15:40\n __/Прога.п 17:20\n", "random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "среда":
+          vk.method("messages.send",
+            {"peer_id": id, "message": "Физика.л 11:35\n Физкультура 13:45\n Инфа.л 15:40\n Физика.лаб/Физика.пр 17:20\n", "random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "четверг":
+          vk.method("messages.send",
+            {"peer_id": id, "message": "__/Прога.лаб 11:35\n МатАн.л 13:45\n Прога.лаб/__ 15:40\n", "random_id": random.randint(1, 2147483647)})
+        elif body.lower() == "пятница":
+          vk.method("messages.send",
+            {"peer_id": id, "message": "Физра(МатАн.п) 11:35\n Ин.яз 13:45\n МатАн.п 15:40\n Философия.п 17:20\n", "random_id": random.randint(1, 2147483647)})
+        else:
+          vk.method("messages.send",
+            {"peer_id": id, "message": "Не понял тебя!", "random_id": random.randint(1, 2147483647)})
+  except Exception as E:
+      time.sleep(0)
+  www=calendar.day_name[my_date.weekday()]    
+  print(www)
+  a = datetime.datetime.today().strftime("%H.%M.%S")
+  a=str(a)   
+  b1=['10','.','40','.','00']
+  if(www=='Monday'):
+    if(a==''.join(b1)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "13:45\n Программирование лекция\n https://zoom.us/j/92397820311?pwd=eHlJQ3ltcXFVY05la3Z0VzZvb1dZQT09","random_id": random.randint(1,2147483647)})                  
+    b1=['12','.','35','.','00']
+    if(a==''.join(b1)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "Чилл","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "Чилл","random_id": random.randint(1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "Чилл","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "Чилл","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "Чилл","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "Чилл","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "Чилл","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "Чилл","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "Чилл","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "Чилл","random_id": random.randint(1,2147483647)}) 
+    b1=['14','.','15','.','00']
+    if(a==''.join(b1)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "Чилл","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "Чилл","random_id": random.randint(1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "Чилл","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "Чилл","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "Чилл","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "Чилл","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "Чилл","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "Чилл","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "Чилл","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "Чилл","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "Чилл","random_id": random.randint(1,2147483647)}) 
+    b1=['10','.','40','.','00']
+  a = datetime.datetime.today().strftime("%H.%M.%S")
+  a=str(a) 
+  b2=['10','.','40','.','00']
+  if(www=='Tuesday'):
+    if(a==''.join(b2)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "13:45\n Философия в мудле",  "random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "13:45\n Философия в мудле",  "random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "13:45\n Философия в мудле",  "random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "13:45\n Философия в мудле",  "random_id": random.randint(1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "13:45\n Философия в мудле",  "random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "13:45\n Философия в мудле","random_id": random.randint(1,2147483647)}) 
+    b2=['12','.','35','.','00']
+    if(a==''.join(b2)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint (1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint (1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint (1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint (1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint (1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "15:40\n АиГ\n https://us04web.zoom.us/j/79319331940?pwd=RWtlZ1VWb3FpcnNzWVRrZm5UN1QvUT09","random_id": random.randint(1,2147483647)}) 
+    b2=['14','.','15','.','00']
+    if(a==''.join(b2)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint  (1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint  (1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint  (1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint  (1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint  (1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "17:20\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)}) 
+    b2=['10','.','40','.','00']
+  a = datetime.datetime.today().strftime("%H.%M.%S")
+  a=str(a) 
+  b3=['08','.','30','.','00']
+  if(www=='Wednesday'):     
+    if(a==''.join(b3)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "11:35\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)}) 
+    b3=['10','.','40','.','00']
+    if(a==''.join(b3)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "Не забудь про отчеты)","random_id": random.randint (1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "Не забудь про отчеты)","random_id": random.randint (1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "Не забудь про отчеты)","random_id": random.randint (1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "Не забудь про отчеты)","random_id": random.randint (1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "Не забудь про отчеты)","random_id": random.randint (1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "Не забудь про отчеты)","random_id": random.randint(1,2147483647)}) 
+    b3=['12','.','35','.','00']
+    if(a==''.join(b3)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint (1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint (1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint (1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint (1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint (1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "15:40\n Информатика лекции\n https://us02web.zoom.us/j/6346812978?pwd=ci9INHdqWlI0eEl4YkdhcE50RVpydz09","random_id": random.randint(1,2147483647)}) 
+    b3=['14','.','15','.','00']
+    if(a==''.join(b3)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint (1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint (1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint (1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint (1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint (1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "17:20\n Физика \n https://us02web.zoom.us/j/400677535?pwd=UGRnTkVJYmtwZ2ZNUFBBQ1lMWkdSZz09","random_id": random.randint(1,2147483647)}) 
+    b3=['08','.','30','.','00']    
+  a = datetime.datetime.today().strftime("%H.%M.%S")    
+  a=str(a)
+  b4=['08','.','30','.','00']    
+  if(www=='Thursday'):  
+    if(a==''.join(b4)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "11:35\n Прога практика\n https://us04web.zoom.us/j/4955723010?pwd=NFdjNUc4MldRUkpSbkI1L3oxTEdRZz09","random_id": random.randint(1,2147483647)}) 
+    b4=['10','.','40','.','00']
+    if(a==''.join(b4)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "13:45\n Матан Л\n https://zoom.us/j/97261136998?pwd=dVpDYmpiYXJDK1QvTW92T0tJbTEyQT09\n","random_id": random.randint(1,2147483647)}) 
+    b4=['08','.','30','.','00']
+  a = datetime.datetime.today().strftime("%H.%M.%S")    
+  a=str(a)    
+  b5=['08','.','30','.','00']
+  if(www=='Friday'):    
+    if(a==''.join(b5)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "11:35\n Матан П\n https://us02web.zoom.us/j/71270460941?pwd=TnNncU5jYkFRWVRFMWozKzZydnhQUT09\n","random_id": random.randint(1,2147483647)}) 
+    b5=['10','.','40','.','00']
+    if(a==''.join(b5)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "13:45\n Англ\n https://us04web.zoom.us/j/77251282238?pwd=SDN0NDdxY3Fvb3V4b21mcWVlcTk1Zz09\n","random_id": random.randint(1,2147483647)}) 
+    b5=['14','.','15','.','00']
+    if(a==''.join(b5)):
+      vk.method("messages.send",
+        {"user_id":156867072, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1, 2147483647)})
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1, 2147483647)})  
+      vk.method("messages.send",
+        {"user_id":259517705, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1, 2147483647)})
+      vk.method("messages.send",
+        {"user_id":266586933, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1, 2147483647)})    
+      vk.method("messages.send",
+        {"user_id":471275588, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1, 2147483647)})  
+      vk.method("messages.send",
+        {"user_id":179910077, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":205580474, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":191928859, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":222258422, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":229219098, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":247521058, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)})  
+      vk.method("messages.send",
+        {"user_id":293199956, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":299874861, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":390892563, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":416282706, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)})
+      vk.method("messages.send",
+        {"user_id":428266864, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":434528351, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":586732055, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":611850077, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":343280568, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)}) 
+      vk.method("messages.send",
+        {"user_id":170559409, "message": "17:20\n Философия пр.\n https://us04web.zoom.us/j/3394689577?pwd=OXJ5VGcyNzVQRU1JU0I5ZEtCajJrUT09\n ","random_id": random.randint(1,2147483647)}) 
+    b5=['08','.','30','.','00'] 
